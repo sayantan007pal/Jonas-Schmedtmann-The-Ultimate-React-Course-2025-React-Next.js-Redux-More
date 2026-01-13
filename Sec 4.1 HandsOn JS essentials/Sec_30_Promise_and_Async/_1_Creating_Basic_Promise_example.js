@@ -22,7 +22,12 @@
 
 function createSimplePromise() {
     // ==================== YOUR CODE HERE ====================
-    
+    return new Promise((resolve, reject)=> {
+        setTimeout(() => {
+            resolve("Success!")
+            
+        }, 1000);
+    })
     
     
     // ========================================================
@@ -46,7 +51,14 @@ function createSimplePromise() {
 
 function checkNumber(num) {
     // ==================== YOUR CODE HERE ====================
-    
+    return new Promise((resolve, reject)=> {
+        if(num>10){
+            resolve("Number is greater than 10")
+        }
+        else{
+            reject("Number is 10 or less")
+        }
+    })
     
     
     // ========================================================
@@ -67,7 +79,11 @@ function checkNumber(num) {
 
 function delayedValue(value, delay) {
     // ==================== YOUR CODE HERE ====================
-    
+    return new Promise((resolve, reject)=>{
+        setTimeout(() => {
+            resolve(value)
+        }, delay);
+    })
     
     
     // ========================================================
