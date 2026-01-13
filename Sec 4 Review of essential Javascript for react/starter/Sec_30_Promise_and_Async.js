@@ -132,6 +132,259 @@
  * ```
  *
  *
+ * ╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║  ⚠️ CRITICAL MISTAKE: Confusing `async function` with `new Promise()`                           ║
+ * ║                        THE #1 BUG THAT TRIPS UP BEGINNERS!                                       ║
+ * ╚══════════════════════════════════════════════════════════════════════════════════════════════════╝
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 🐛 THE BUGGY CODE (What Went Wrong)
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 
+ * ```javascript
+ * // ❌ BUGGY CODE:
+ * async function myPromise(resolve, reject) {    // ❌ BUG 1: async + (resolve, reject) = CONFUSION!
+ *     let isSuccess = true;
+ *     setTimeout(() => {
+ *         if (isSuccess) {
+ *             resolve(`The promise resolved`)     // ❌ BUG 2: resolve is NOT a function here!
+ *         } else {
+ *             reject(`the promise rejected`)      // ❌ BUG 3: reject is NOT a function here!
+ *         }
+ *     }, 2000);
+ * }
+ * 
+ * // ❌ BUG 4: Calling the function wrong!
+ * const val = myPromise(`hi`)    // 'hi' becomes 'resolve' parameter → "hi" is not a function!
+ * console.log(val)               // Prints: Promise { undefined }
+ * ```
+ * 
+ * ERROR: "TypeError: resolve is not a function"
+ * 
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 🎭 ANALOGY: The Factory vs The Machine 🏭
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 
+ * Think of it like TWO DIFFERENT WAYS to make a product:
+ * 
+ *   ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+ *   │                                                                                             │
+ *   │   🏭 new Promise((resolve, reject) => {...})                                               │
+ *   │   = BUILDING A CUSTOM MACHINE FROM SCRATCH                                                 │
+ *   │   • YOU control when to press the "SUCCESS" button (resolve)                              │
+ *   │   • YOU control when to press the "ERROR" button (reject)                                 │
+ *   │   • The Promise gives you these buttons to use!                                           │
+ *   │                                                                                             │
+ *   │   🤖 async function myFunc() {...}                                                         │
+ *   │   = USING A PRE-BUILT AUTOMATIC MACHINE                                                   │
+ *   │   • The machine AUTOMATICALLY wraps your return value in a Promise                        │
+ *   │   • The machine AUTOMATICALLY resolves when you `return`                                  │
+ *   │   • The machine AUTOMATICALLY rejects when you `throw`                                    │
+ *   │   • You DON'T get resolve/reject buttons - the machine handles it!                        │
+ *   │                                                                                             │
+ *   └─────────────────────────────────────────────────────────────────────────────────────────────┘
+ * 
+ *   ❌ YOUR BUG: You tried to use the "custom machine" buttons (resolve/reject) 
+ *               inside the "automatic machine" (async function)!
+ *               That's like looking for manual controls on a self-driving car!
+ * 
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 🔍 DETAILED BUG ANALYSIS
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 
+ * ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
+ * │  BUG 1: async function myPromise(resolve, reject)                                             │
+ * ├───────────────────────────────────────────────────────────────────────────────────────────────┤
+ * │                                                                                               │
+ * │   WHAT YOU WROTE:                                                                             │
+ * │   async function myPromise(resolve, reject) { ... }                                          │
+ * │                            ↑        ↑                                                        │
+ * │                            These are just REGULAR PARAMETERS, not Promise functions!          │
+ * │                                                                                               │
+ * │   WHAT YOU THOUGHT:                                                                           │
+ * │   "resolve and reject will be the Promise functions"                                         │
+ * │                                                                                               │
+ * │   WHAT ACTUALLY HAPPENED:                                                                    │
+ * │   • These are just parameter NAMES                                                           │
+ * │   • When you call myPromise('hi'), 'hi' becomes the value of 'resolve'!                     │
+ * │   • resolve = 'hi', reject = undefined                                                       │
+ * │   • Then resolve('The promise resolved') = 'hi'('The promise resolved') = 💥 ERROR!          │
+ * │                                                                                               │
+ * │   WHY? Because ONLY `new Promise()` gives you the real resolve/reject functions!             │
+ * │                                                                                               │
+ * └───────────────────────────────────────────────────────────────────────────────────────────────┘
+ * 
+ * ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
+ * │  BUG 2: Using setTimeout inside async without wrapping in new Promise()                       │
+ * ├───────────────────────────────────────────────────────────────────────────────────────────────┤
+ * │                                                                                               │
+ * │   setTimeout is a CALLBACK-BASED API, not a Promise-based API!                               │
+ * │                                                                                               │
+ * │   async/await ONLY works with Promises:                                                      │
+ * │   • Can't await setTimeout directly                                                          │
+ * │   • Must wrap setTimeout in a Promise first!                                                 │
+ * │                                                                                               │
+ * │   🎭 ANALOGY:                                                                                │
+ * │   • async/await speaks "Promise language"                                                    │
+ * │   • setTimeout speaks "Callback language"                                                    │
+ * │   • You need a TRANSLATOR (new Promise()) to make them work together!                       │
+ * │                                                                                               │
+ * └───────────────────────────────────────────────────────────────────────────────────────────────┘
+ * 
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * ✅ THE CORRECT WAYS TO CREATE PROMISES
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 
+ * ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
+ * │  WAY 1: Using new Promise() (When you need resolve/reject control)                            │
+ * ├───────────────────────────────────────────────────────────────────────────────────────────────┤
+ * │                                                                                               │
+ * │  Use this when working with CALLBACK-BASED APIs (setTimeout, fs.readFile, etc.)              │
+ * │                                                                                               │
+ * │  ```javascript                                                                                │
+ * │  function myPromise() {                           // ✅ Regular function, NOT async          │
+ * │      return new Promise((resolve, reject) => {    // ✅ new Promise gives you resolve/reject │
+ * │          let isSuccess = true;                                                               │
+ * │                                                                                               │
+ * │          setTimeout(() => {                       // Callback-based API                      │
+ * │              if (isSuccess) {                                                                │
+ * │                  resolve(`The promise resolved`)  // ✅ resolve IS a function here!         │
+ * │              } else {                                                                        │
+ * │                  reject(`The promise rejected`)   // ✅ reject IS a function here!          │
+ * │              }                                                                                │
+ * │          }, 2000);                                                                           │
+ * │      });                                                                                      │
+ * │  }                                                                                            │
+ * │  ```                                                                                          │
+ * │                                                                                               │
+ * └───────────────────────────────────────────────────────────────────────────────────────────────┘
+ * 
+ * ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
+ * │  WAY 2: Using async/await (When you already have Promises)                                    │
+ * ├───────────────────────────────────────────────────────────────────────────────────────────────┤
+ * │                                                                                               │
+ * │  Use this when working with EXISTING Promise-based APIs (fetch, axios, etc.)                 │
+ * │                                                                                               │
+ * │  ```javascript                                                                                │
+ * │  async function fetchData() {               // ✅ async automatically returns a Promise      │
+ * │      try {                                                                                    │
+ * │          const response = await fetch(url); // ✅ await existing Promise                    │
+ * │          return response.json();            // ✅ return = resolve with this value          │
+ * │      } catch (error) {                                                                       │
+ * │          throw error;                       // ✅ throw = reject with this error            │
+ * │      }                                                                                        │
+ * │  }                                                                                            │
+ * │  ```                                                                                          │
+ * │                                                                                               │
+ * │  NOTICE: No resolve/reject needed! async handles it automatically:                           │
+ * │  • return value = resolve(value)                                                              │
+ * │  • throw error = reject(error)                                                                │
+ * │                                                                                               │
+ * └───────────────────────────────────────────────────────────────────────────────────────────────┘
+ * 
+ * ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
+ * │  WAY 3: async + new Promise() (When you MUST use setTimeout with async)                       │
+ * ├───────────────────────────────────────────────────────────────────────────────────────────────┤
+ * │                                                                                               │
+ * │  Create a "promisified" delay, then use it with async/await:                                 │
+ * │                                                                                               │
+ * │  ```javascript                                                                                │
+ * │  // Step 1: Create a reusable delay Promise (wrapper for setTimeout)                         │
+ * │  function delay(ms) {                                                                        │
+ * │      return new Promise(resolve => setTimeout(resolve, ms));                                 │
+ * │  }                                                                                            │
+ * │                                                                                               │
+ * │  // Step 2: Use it with async/await!                                                         │
+ * │  async function myAsyncFunction() {                                                          │
+ * │      console.log('Starting...');                                                             │
+ * │      await delay(2000);              // ✅ Now we can await setTimeout!                      │
+ * │      console.log('2 seconds later!');                                                        │
+ * │      return 'Done!';                 // ✅ This resolves the returned Promise               │
+ * │  }                                                                                            │
+ * │  ```                                                                                          │
+ * │                                                                                               │
+ * └───────────────────────────────────────────────────────────────────────────────────────────────┘
+ * 
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 📊 COMPARISON TABLE: new Promise() vs async function
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 
+ *   ┌──────────────────────────────────┬──────────────────────────────────────────────────────────┐
+ *   │     new Promise()                 │           async function                                │
+ *   ├──────────────────────────────────┼──────────────────────────────────────────────────────────┤
+ *   │  YOU call resolve(value)         │  return value = auto resolve                            │
+ *   │  YOU call reject(error)          │  throw error = auto reject                              │
+ *   ├──────────────────────────────────┼──────────────────────────────────────────────────────────┤
+ *   │  For callback-based APIs         │  For already Promise-based APIs                         │
+ *   │  (setTimeout, fs.readFile)       │  (fetch, axios, await)                                  │
+ *   ├──────────────────────────────────┼──────────────────────────────────────────────────────────┤
+ *   │  More control, more verbose      │  Less control, cleaner syntax                           │
+ *   └──────────────────────────────────┴──────────────────────────────────────────────────────────┘
+ * 
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 🔧 FIXING YOUR CODE: Complete Corrected Version
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 
+ * ```javascript
+ * // ✅ CORRECT: Using new Promise() (for setTimeout)
+ * function myPromise() {                              // ✅ Regular function, NOT async
+ *     return new Promise((resolve, reject) => {       // ✅ new Promise gives real resolve/reject
+ *         let isSuccess = true;
+ *         
+ *         setTimeout(() => {
+ *             if (isSuccess) {
+ *                 resolve(`The promise resolved`);    // ✅ Works! resolve is a real function
+ *             } else {
+ *                 reject(`The promise rejected`);     // ✅ Works! reject is a real function
+ *             }
+ *         }, 2000);
+ *     });
+ * }
+ * 
+ * // ✅ CORRECT Consumer using async/await
+ * async function promiseConsumed() {
+ *     try {
+ *         let result = await myPromise();             // ✅ Waits 2 seconds, gets the value
+ *         console.log(result);                        // "The promise resolved"
+ *         return result;
+ *     } catch (err) {
+ *         console.log(err);                           // Would catch "The promise rejected"
+ *     }
+ * }
+ * 
+ * // ✅ CORRECT way to call
+ * promiseConsumed();                                  // This triggers the async function
+ * myPromise().then(val => console.log(val));          // "The promise resolved"
+ * ```
+ * 
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 🎤 INTERVIEW TIP: How to Explain This Mistake
+ * ═══════════════════════════════════════════════════════════════════════════════════════════════════
+ * 
+ * "There are TWO ways to create Promises, and they should NOT be mixed:
+ * 
+ *  1. `new Promise((resolve, reject) => {...})`
+ *     - The Promise constructor GIVES you resolve and reject functions
+ *     - Use this for callback-based APIs like setTimeout
+ * 
+ *  2. `async function() {...}`
+ *     - Automatically returns a Promise
+ *     - resolve happens via `return`, reject happens via `throw`
+ *     - Use this for consuming existing Promises
+ * 
+ *  The common mistake is using resolve/reject parameters in an async function.
+ *  But async functions don't GIVE you resolve/reject - those are just parameter names!
+ * 
+ *  Think of it like: `new Promise` = manual transmission (you control gears),
+ *  `async` = automatic transmission (car handles gears for you).
+ *  You can't shift gears manually in an automatic car!"
+ *
  * ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
  * │  ✨ ASYNC/AWAIT - SYNTACTIC SUGAR FOR PROMISES                                                          │
  * └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
