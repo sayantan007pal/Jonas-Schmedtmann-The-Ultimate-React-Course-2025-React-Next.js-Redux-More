@@ -18,6 +18,7 @@
  */
 
 
+
 // =============================================================================
 // CHALLENGE: Create a Promise that Simulates a Coin Flip
 // =============================================================================
@@ -44,7 +45,19 @@
 
 function coinFlip() {
     // ==================== YOUR CODE HERE ====================
-    
+    return new Promise((resolve, reject)=>{
+        let val = Math.random(0,1)
+        console.log(val)
+        setTimeout(() => {
+            if(val>=.5){
+                resolve("Heads! 🪙")
+            }
+            else{
+                reject("Tails! 💀")
+            }
+        }, 1000);
+
+    })
     
     
     
@@ -75,7 +88,16 @@ function coinFlip() {
 
 function createDelayedPromise(shouldSucceed, delay, message) {
     // ==================== YOUR CODE HERE ====================
-    
+    return new Promise((resolve, reject)=>{
+        setTimeout(() => {
+            if(shouldSucceed==true){
+                resolve("Success!")
+            }
+            else{
+                reject("Failed!")
+            }
+        }, delay);
+    })
     
     
     
