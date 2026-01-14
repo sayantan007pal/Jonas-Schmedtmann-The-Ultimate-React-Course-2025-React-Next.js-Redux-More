@@ -22,9 +22,9 @@
 
 function getImmediatelyResolved() {
     // ==================== YOUR CODE HERE ====================
+    let promise = Promise.resolve("Instantly resolved!")
     
-    return Promise.resolve("Instantly resolved!");
-    
+    return promise
     // ========================================================
 }
 
@@ -45,7 +45,8 @@ function getImmediatelyResolved() {
 function getImmediatelyRejected() {
     // ==================== YOUR CODE HERE ====================
     
-    return Promise.reject("Instantly rejected!");
+    let reject = Promise.reject("Instantly rejected!")
+    return reject
     
     // ========================================================
 }
@@ -71,16 +72,19 @@ function getImmediatelyRejected() {
 
 function simulateRandomOutcome() {
     // ==================== YOUR CODE HERE ====================
-    
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject)=>{
+        let val = Math.random()
         setTimeout(() => {
-            if (Math.random() >= 0.5) {
-                resolve("Operation succeeded!");
-            } else {
-                reject("Operation failed!");
+            if(val){
+                resolve("Operation succeeded!")
             }
+            else{
+                reject("Operation failed!")
+            }
+            
         }, 500);
-    });
+    })
+    
     
     // ========================================================
 }
