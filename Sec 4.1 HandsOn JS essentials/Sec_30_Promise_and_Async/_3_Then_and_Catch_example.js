@@ -26,17 +26,11 @@
 
 function doubleAfterDelay(num) {
     // ==================== YOUR CODE HERE ====================
-    return new Promise((resolve)=>{
-        value= num*2,
-        setTimeout(()=>{
-            return value;
-        }, 500)
-
-
-
-    })
-
-    
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(num * 2);
+        }, 500);
+    });
     // ========================================================
 }
 
@@ -73,7 +67,14 @@ function quadrupleNumber(num) {
 
 function divideNumbers(a, b) {
     // ==================== YOUR CODE HERE ====================
-    
+    return new Promise((resolve,reject)=>{
+        if(b==0){
+            reject(`Cannot divide by zero`)
+        }
+        else{
+            resolve(a/b)
+        }
+    })
     
     
     // ========================================================
@@ -81,9 +82,8 @@ function divideNumbers(a, b) {
 
 function safeDivide(a, b) {
     // ==================== YOUR CODE HERE ====================
-    
-    
-    
+    return divideNumbers(a, b)
+        .catch(err => 0);  // If error, return 0 instead
     // ========================================================
 }
 
@@ -108,9 +108,13 @@ function safeDivide(a, b) {
 
 function processUserData(user) {
     // ==================== YOUR CODE HERE ====================
-    
-    
-    
+    return Promise.resolve(user)
+        .then(u => ({
+            fullName: `${u.firstName} ${u.lastName}`,
+            ag:`${u.age}`,
+        }))
+        .then(u => `Hello, ${u.fullName}! You are ${u.ag} years old.`)
+        .then(greeting => greeting.toUpperCase());
     // ========================================================
 }
 
