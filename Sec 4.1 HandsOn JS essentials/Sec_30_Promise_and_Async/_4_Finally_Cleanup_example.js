@@ -31,9 +31,21 @@
 
 function fetchWithLogging(shouldSucceed) {
     // ==================== YOUR CODE HERE ====================
+    let isLoading = true;
     
+    const promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (shouldSucceed) resolve("Data fetched successfully");
+            else reject("Fetch failed");
+        }, 500);
+    }).finally(() => {
+        isLoading = false;
+    });
     
-    
+    return {
+        promise,
+        getLoadingState: () => isLoading
+    };
     // ========================================================
 }
 
@@ -59,8 +71,21 @@ function fetchWithLogging(shouldSucceed) {
 
 function connectToDatabase(shouldConnect) {
     // ==================== YOUR CODE HERE ====================
-    
-    
+        const logs = []
+
+    const val = new Promise((resolve,reject)=>{
+        setTimeout(() => {
+            if(shouldConnect) resolve (`Connected to database`)
+            else reject (`Connection failed`)
+        }, 300);
+    }).finally(()=>{
+        logs.push(`Cleanup: closing temporary resources`)
+    })
+    return {
+        promise: val,
+        connectionAttempted: true,
+        getLogs: () => logs
+    }
     
     // ========================================================
 }
@@ -91,7 +116,29 @@ function connectToDatabase(shouldConnect) {
 
 function processOrder(orderId) {
     // ==================== YOUR CODE HERE ====================
+    let status = "pending";
+    let promise = new Promise((resolve,reject)=>{
+        setTimeout(() => {
+            if(orderId<=0){
+                reject(`Invalid order ID`)
+            }
+            else{
+                resolve(`Order #${orderId} processed`)
+
+            }
+        }, 200);
+    }).then((result) => {
+        return result + " - Confirmation sent";
+    }).catch((err)=>{
+        return `Error: ${err}`;
+    }).finally(()=>{
+        status = "complete";
+    })
     
+    return {
+        promise,
+        getStatus: () => status
+    }
     
     
     // ========================================================
