@@ -25,7 +25,12 @@
 
 async function greetUser(name) {
     // ==================== YOUR CODE HERE ====================
-    
+    const promise = new Promise((resolve,reject)=>{
+        resolve(`Hello, ${name}!`)
+    })
+    const user = await promise;
+
+    return user
     
     
     // ========================================================
@@ -49,7 +54,17 @@ async function greetUser(name) {
 
 async function fetchUserById(id) {
     // ==================== YOUR CODE HERE ====================
-    
+    const promise = new Promise((resolve, reject)=>{
+        setTimeout(() => {
+            resolve(id)
+        }, 500);
+    })
+    const userId = await promise;
+    return{
+        id: userId,
+        name: `User_${userId}`,
+        email: `user${userId}@example.com`
+    }
     
     
     // ========================================================
@@ -72,7 +87,14 @@ async function fetchUserById(id) {
 
 async function calculateSum(numbers) {
     // ==================== YOUR CODE HERE ====================
-    
+
+    const promise = new Promise((resolve,reject)=>{
+        setTimeout(() => {
+            resolve(numbers.reduce((sum, val) => sum + val, 0))
+        }, 300);
+    })
+    const val = await promise;
+    return val;
     
     
     // ========================================================
@@ -97,8 +119,13 @@ async function calculateSum(numbers) {
 
 function isAsyncFunction(fn) {
     // ==================== YOUR CODE HERE ====================
-    
-    
+    const result = fn()
+    if(result instanceof Promise){
+        return true
+    }
+    else {
+        return false
+    }
     
     // ========================================================
 }
