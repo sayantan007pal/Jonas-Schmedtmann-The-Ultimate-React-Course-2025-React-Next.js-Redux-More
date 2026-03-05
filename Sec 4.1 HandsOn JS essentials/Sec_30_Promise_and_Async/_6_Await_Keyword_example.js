@@ -14,9 +14,13 @@
  * Given the helper function below:
  */
 function delay(ms, value) {
-    return new Promise(resolve => setTimeout(() => resolve(value), ms));
-}
+    return new Promise((resolve) => {
+    setTimeout(() => {
+        resolve (value)
+    }, ms);
 
+})
+}
 /**
  * Create an async function getSequentialValues() that:
  * - Awaits delay(200, "First") and stores the result
@@ -32,7 +36,11 @@ function delay(ms, value) {
 
 async function getSequentialValues() {
     // ==================== YOUR CODE HERE ====================
-    
+    const result = await delay(200, "First");
+    const result2 = await delay(200, "Second");
+    const result3 = await delay(200, "Third");
+    return [result, result2, result3]
+
     
     
     // ========================================================
@@ -59,7 +67,15 @@ async function getSequentialValues() {
 
 async function getUserStatus(userId) {
     // ==================== YOUR CODE HERE ====================
-    
+    if(userId%2 ==0){
+        const user = await delay(300, { active: true, name: "Active User" });
+        await delay(200);
+        return`Welcome back, Active User!`
+    }
+    else{
+        const user = await delay(300, { active: false, name: "Inactive User" });
+        return `Inactive User needs to reactivate account`
+    }
     
     
     // ========================================================
@@ -86,7 +102,13 @@ async function getUserStatus(userId) {
 
 async function processItems(items) {
     // ==================== YOUR CODE HERE ====================
-    
+    const arr = []
+    for(let item of items){
+        await delay(100);
+        arr.push(`Processed: ${item}`)
+    }
+return arr
+
     
     
     // ========================================================
