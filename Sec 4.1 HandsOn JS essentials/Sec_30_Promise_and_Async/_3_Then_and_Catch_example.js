@@ -26,12 +26,16 @@
 
 function doubleAfterDelay(num) {
     // ==================== YOUR CODE HERE ====================
-    return new Promise((resolve, reject)=>{
-        setTimeout(() => {
-            resolve(num*2)
-        }, 500);
+    return new Promise((resolve)=>{
+        value= num*2,
+        setTimeout(()=>{
+            return value;
+        }, 500)
+
+
+
     })
-    
+
     
     // ========================================================
 }
@@ -40,9 +44,8 @@ function quadrupleNumber(num) {
     // ==================== YOUR CODE HERE ====================
     // Use doubleAfterDelay and .then() chaining
     
-    // CORRECT SOLUTION: Chain two .then() calls!
-    return doubleAfterDelay(num)           // First: 5 → 10 (after 500ms)
-        .then(doubled => doubleAfterDelay(doubled));  // Then: 10 → 20 (after another 500ms)
+    return doubleAfterDelay(num).then(value=> doubleAfterDelay(value))
+                                
     
     // ========================================================
 }

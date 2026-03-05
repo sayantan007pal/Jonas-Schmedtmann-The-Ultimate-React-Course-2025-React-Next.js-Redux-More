@@ -22,9 +22,11 @@
 
 function getImmediatelyResolved() {
     // ==================== YOUR CODE HERE ====================
-    let promise = Promise.resolve("Instantly resolved!")
-    
-    return promise
+    // return new Promise((resolve)=>{
+    //     resolve(`Instantly resolved!`)
+    // })
+    let promise = Promise.resolve(`Instantly resolved!`)
+    return promise;
     // ========================================================
 }
 
@@ -44,7 +46,10 @@ function getImmediatelyResolved() {
 
 function getImmediatelyRejected() {
     // ==================== YOUR CODE HERE ====================
-    
+    // return new Promise((resolve,reject)=>{
+    //     reject(`Instantly rejected!`)
+    // })
+
     let reject = Promise.reject("Instantly rejected!")
     return reject
     
@@ -96,3 +101,23 @@ module.exports = {
     getImmediatelyRejected,
     simulateRandomOutcome
 };
+
+
+// =============================================================================
+// 📝 KEY NOTES: Promise.resolve() vs new Promise() with setTimeout
+// =============================================================================
+/**
+ * Promise.resolve(value) 
+ *   → Creates a promise that resolves IMMEDIATELY
+ *   → Use when you need an instant resolved promise
+ *   → Example: Promise.resolve("done") // Resolves right away
+ * 
+ * new Promise((resolve) => { setTimeout(() => resolve(value), 500) })
+ *   → Creates a promise that resolves AFTER the delay
+ *   → Use when you need to simulate async operations with delays
+ *   → Example: Resolves after 500ms
+ * 
+ * ⚠️ COMMON MISTAKE:
+ *   Promise.resolve(value, setTimeout(...))  // ❌ WRONG - setTimeout is ignored!
+ *   The second argument to Promise.resolve() is ignored. It resolves immediately.
+ */

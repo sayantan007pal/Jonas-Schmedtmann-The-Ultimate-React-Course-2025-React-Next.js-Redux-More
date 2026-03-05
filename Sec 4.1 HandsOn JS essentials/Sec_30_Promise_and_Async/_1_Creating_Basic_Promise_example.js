@@ -22,11 +22,10 @@
 
 function createSimplePromise() {
     // ==================== YOUR CODE HERE ====================
-    return new Promise((resolve, reject)=> {
-        setTimeout(() => {
-            resolve("Success!")
-            
-        }, 1000);
+    return new Promise((resolve)=>{
+        setTimeout(()=>{
+            resolve(`Success!`)
+        }, 1000)
     })
     
     
