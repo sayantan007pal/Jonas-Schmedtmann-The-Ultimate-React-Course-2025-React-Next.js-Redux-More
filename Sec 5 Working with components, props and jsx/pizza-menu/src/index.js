@@ -4,9 +4,28 @@ import ReactDOM from 'react-dom/client'
 
 function App(){
   return <div>
+    <Headers />
     <h1>Hello React</h1>
-    <Pizza/>
+    <Menu/>
+    <Footers/>
   </div>
+}
+function Headers(){
+    return <h1>Fast React Co.</h1>
+}
+
+function Menu(){
+  return (
+    <div>
+      <h1>
+        <Pizza/>
+      </h1>
+    </div>
+  )
+}
+
+function Footers(){
+    return <footer>{new Date().toLocaleTimeString()}. We're currently open</footer>
 }
 //never nest this component inside the App component because it will cause an infinite loop and crash the application, we will define it outside of the App component and then we will use it inside the App component
 function Pizza(){
@@ -54,6 +73,7 @@ function Pizza(){
     soldOut: false,
   },
 ];
+
 
   return (<div>
     <h2>Our Menu</h2>
