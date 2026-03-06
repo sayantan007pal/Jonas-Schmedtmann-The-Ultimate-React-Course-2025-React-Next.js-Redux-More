@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
-
+//BY default we're in strict mode in React 18 and above, which means that React will run the App component twice in development mode to help us find any potential issues with our code. This is a new feature in React 18 and above, and it's not a bug.
+//thus we will see the console log twice because of the strict mode, but in production mode it will only run once and it will not cause any issues with our application. So we can safely ignore the double console log in development mode.
 function App(){
   return <div>
     <Headers />
@@ -25,8 +26,18 @@ function Menu(){
 }
 
 function Footers(){
+  const hour = new Date().getHours();
+  const openHour =12;
+  const closeHour =22;
+  const isOpen = hour >= openHour && hour <= closeHour;
+
+  // if(isOpen) alert("We're curently open!")
+  //   else alert("Sorry we're closed")
+
     return <footer>{new Date().toLocaleTimeString()}. We're currently open</footer>
 }
+
+
 //never nest this component inside the App component because it will cause an infinite loop and crash the application, we will define it outside of the App component and then we will use it inside the App component
 function Pizza(){
   const pizzaData = [
