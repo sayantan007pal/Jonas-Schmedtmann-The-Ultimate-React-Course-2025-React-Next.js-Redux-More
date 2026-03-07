@@ -71,7 +71,7 @@ function Menu(){
   return (
     <div className='menu'>
     <h2>Our Menu</h2>
-    <Pizza/>
+    <Pizza pizzaData={pizzaData}/>
     </div>
   )
 }
@@ -99,7 +99,7 @@ function Footers(){
 //never nest this component inside the App component because it will cause an infinite loop and crash the application, we will define it outside of the App component and then we will use it inside the App component
 function Pizza(props){
   console.log(props)
-
+  const { pizzaData } = props; // destructure pizzaData from props
 
   return (<div>
 
