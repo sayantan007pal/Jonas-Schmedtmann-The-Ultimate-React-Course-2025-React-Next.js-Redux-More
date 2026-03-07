@@ -7,13 +7,13 @@ import  './index.css'
 function App(){
   return <div>
     <Headers />
-    <Profile 
+    {/* <Profile 
   img = "pizzas/focaccia.jpg"
   name="John Doe" 
   description="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
   skill1="React" 
   skill2="Node.js" 
-  skill3="TypeScript"/>
+  skill3="TypeScript"/> */}
      <Menu/>
      
     <Footers/>
