@@ -1,23 +1,30 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import  './index.css'
 
 //BY default we're in strict mode in React 18 and above, which means that React will run the App component twice in development mode to help us find any potential issues with our code. This is a new feature in React 18 and above, and it's not a bug.
 //thus we will see the console log twice because of the strict mode, but in production mode it will only run once and it will not cause any issues with our application. So we can safely ignore the double console log in development mode.
 function App(){
   return <div>
     <Headers />
-    <h1>Hello React</h1>
     <Menu/>
     <Footers/>
   </div>
 }
 function Headers(){
-    return <h1>Fast React Co.</h1>
+  // const headStyle = {color: 'red', fontSize: '48px', textTransform:'uppercase'};
+  
+    // return <h1 style={headStyle}>Fast React Co.</h1>
+    return (
+      <header className="header">
+        <h1 >Fast React Co.</h1>
+      </header>
+  )
 }
 
 function Menu(){
   return (
-    <div>
+    <div className='menu'>
       <h1>
         <Pizza/>
       </h1>
@@ -34,7 +41,7 @@ function Footers(){
   // if(isOpen) alert("We're curently open!")
   //   else alert("Sorry we're closed")
 
-    return <footer>{new Date().toLocaleTimeString()}. We're currently open</footer>
+    return <footer className='footer'>{new Date().toLocaleTimeString()}. We're currently open</footer>
 }
 
 
