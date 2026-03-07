@@ -152,20 +152,29 @@ function Pizza(props) {
 
       <ul className="pizzas">
         {pizzaData.map((pizza) => (
-          <li
-            key={pizza.name}
-            className={`pizza ${pizza.soldOut ? 'sold-out' : ''}`}
-          >
-            <img src={pizza.photoName} alt={pizza.name} />
-            <div>
-              <h3>{pizza.name}</h3>
-              <p>{pizza.ingredients}</p>
-              <span>{pizza.soldOut ? 'SOLD OUT' : `$${pizza.price}`}</span>
-            </div>
-          </li>
+          <PizzaItem key={pizza.name} pizzaObj={pizza} />
         ))}
       </ul>
     </div>
+  );
+}
+
+// Single pizza component - here we can use the early return pattern!
+// if the pizza is sold out, return null and don't render anything for that pizza
+function PizzaItem({ pizzaObj }) {
+  // EARLY RETURN PATTERN: if soldOut is true, return null and skip rendering this pizza entirely
+  if (pizzaObj.soldOut === true) return null;
+
+  // If we reach here, the pizza is NOT sold out, so we render it
+  return (
+    <li className="pizza">
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
+      <div>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>${pizzaObj.price}</span>
+      </div>
+    </li>
   );
 }
 //then we will render App component to the DOM by using ReactDOM.createRoot and root.render which is the new way to render in React 18 and above
