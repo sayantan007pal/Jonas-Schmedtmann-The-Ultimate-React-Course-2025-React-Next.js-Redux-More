@@ -142,7 +142,7 @@ function Footers() {
 function Pizza(props) {
   console.log(props);
   const { pizzaData } = props; // destructure pizzaData from props
-
+ // the destructuring syntax allows us to extract the pizzaData property from the props object and assign it to a variable called pizzaData, which we can then use in our component to render the list of pizzas.  we can directly use pizzaData instead of having to access it through props.pizzaData every time we want to use it in our component.
   return (
     <div>
       <h3 className="menu">
@@ -152,7 +152,7 @@ function Pizza(props) {
 
       <ul className="pizzas">
         {pizzaData.map((pizza) => (
-          <PizzaItem key={pizza.name} pizzaObj={pizza} />
+          <PizzaItem key={pizza.name} pizzaObj={pizza} /> // here we are passing the entire pizza object as a prop to the PizzaItem component, and we are using the name of the pizza as the key for each item in the list. this is important because React uses the key to keep track of which items have changed, been added, or been removed from the list, and it helps React optimize the rendering of the list.
         ))}
       </ul>
     </div>
