@@ -7,8 +7,27 @@ import  './index.css'
 function App(){
   return <div>
     <Headers />
-    <Menu/>
+    <Profile 
+  img = "pizzas/focaccia.jpg"
+  name="John Doe" 
+  description="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
+  skill1="React" 
+  skill2="Node.js" 
+  skill3="TypeScript"/>
+     <Menu/>
+     
     <Footers/>
+  </div>
+}
+
+function Profile(props){
+  return <div className='card'>
+    <img src={props.img} alt={props.name} />
+    <h1>{props.name}</h1>
+    <p>{props.description}</p>
+    <span style={{backgroundColor: 'red', fontSize: '10px'}}>{props.skill1}</span>
+    <span style={{backgroundColor: 'blue', fontSize: '10px'}}>{props.skill2}</span>
+    <span style={{backgroundColor: 'pink', fontSize: '10px'}}>{props.skill3}</span>
   </div>
 }
 function Headers(){
