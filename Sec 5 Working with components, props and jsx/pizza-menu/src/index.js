@@ -25,9 +25,8 @@ function Headers(){
 function Menu(){
   return (
     <div className='menu'>
-      <h1>
-        <Pizza/>
-      </h1>
+      <h2>Our Menu</h2>
+      <Pizza/>
     </div>
   )
 }
@@ -41,7 +40,14 @@ function Footers(){
   // if(isOpen) alert("We're curently open!")
   //   else alert("Sorry we're closed")
 
-    return <footer className='footer'>{new Date().toLocaleTimeString()}. We're currently open</footer>
+    return <footer className='footer'>
+    <div>
+      <h3>
+        {new Date().toLocaleTimeString()}. We're currently open
+      </h3>
+
+    </div>
+  </footer>
 }
 
 
@@ -94,7 +100,7 @@ function Pizza(){
 
 
   return (<div>
-    <h2>Our Menu</h2>
+
     <p>Authentic Italian cuisine. 6 creative dishes to choose from. All from our stone oven, all organic, and all delicious.</p>
     
     {/* <ul className='pizzas'>
