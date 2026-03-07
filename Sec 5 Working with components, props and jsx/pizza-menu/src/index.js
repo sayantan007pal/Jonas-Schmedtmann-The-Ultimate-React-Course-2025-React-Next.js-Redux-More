@@ -22,38 +22,7 @@ function Headers(){
   )
 }
 
-function Menu(){
-  return (
-    <div className='menu'>
-      <h2>Our Menu</h2>
-      <Pizza/>
-    </div>
-  )
-}
-
-function Footers(){
-  const hour = new Date().getHours();
-  const openHour =12;
-  const closeHour =22;
-  const isOpen = hour >= openHour && hour <= closeHour;
-
-  // if(isOpen) alert("We're curently open!")
-  //   else alert("Sorry we're closed")
-
-    return <footer className='footer'>
-    <div>
-      <h3>
-        {new Date().toLocaleTimeString()}. We're currently open
-      </h3>
-
-    </div>
-  </footer>
-}
-
-
-//never nest this component inside the App component because it will cause an infinite loop and crash the application, we will define it outside of the App component and then we will use it inside the App component
-function Pizza(){
-  const pizzaData = [
+const pizzaData = [
   {
     name: "Focaccia",
     ingredients: "Bread with italian olive oil and rosemary",
@@ -98,12 +67,45 @@ function Pizza(){
   },
 ];
 
+function Menu(){
+  return (
+    <div className='menu'>
+    <h2>Our Menu</h2>
+    <Pizza/>
+    </div>
+  )
+}
+
+function Footers(){
+  const hour = new Date().getHours();
+  const openHour =12;
+  const closeHour =22;
+  const isOpen = hour >= openHour && hour <= closeHour;
+
+  // if(isOpen) alert("We're curently open!")
+  //   else alert("Sorry we're closed")
+
+    return <footer className='footer'>
+    <div>
+      <h3>
+        {new Date().toLocaleTimeString()}. We're currently open
+      </h3>
+
+    </div>
+  </footer>
+}
+
+
+//never nest this component inside the App component because it will cause an infinite loop and crash the application, we will define it outside of the App component and then we will use it inside the App component
+function Pizza(props){
+  console.log(props)
+
 
   return (<div>
 
     <p>Authentic Italian cuisine. 6 creative dishes to choose from. All from our stone oven, all organic, and all delicious.</p>
     
-    {/* <ul className='pizzas'>
+    <ul className='pizzas'>
       {pizzaData.map((pizza) => (
         <li key={pizza.name} className={`pizza ${pizza.soldOut ? 'sold-out' : ''}`}>
           <img src={pizza.photoName} alt={pizza.name} />
@@ -114,7 +116,7 @@ function Pizza(){
           </div>
         </li>
       ))}
-    </ul> */}
+    </ul>
   </div>
   )
 }
