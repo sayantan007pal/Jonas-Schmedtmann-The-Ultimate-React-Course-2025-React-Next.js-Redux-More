@@ -141,21 +141,33 @@ function Footers() {
 //never nest this component inside the App component because it will cause an infinite loop and crash the application, we will define it outside of the App component and then we will use it inside the App component
 function Pizza(props) {
   console.log(props);
+  
+  
+  
+  // const pizzaData = {} // here we are creating a new variable called pizzaData and assigning it an empty object, but we will later assign it the value of props.pizzaData which is the array of pizza objects that we passed as a prop to the Pizza component from the Menu component. this is just a placeholder for now, and we will update it later to get the actual data from props.
+
+
   const { pizzaData } = props; // destructure pizzaData from props
  // the destructuring syntax allows us to extract the pizzaData property from the props object and assign it to a variable called pizzaData, which we can then use in our component to render the list of pizzas.  we can directly use pizzaData instead of having to access it through props.pizzaData every time we want to use it in our component.
+  const numPizzas = pizzaData.length;
   return (
-    <div>
+    <> {/* this is called react fragment, and it's a way to group multiple elements together without adding an extra node to the DOM. it's useful when we want to return multiple elements from a component without wrapping them in a div or any other container element. in this case, we are using it to wrap the h3 and ul elements together without adding an extra div around them. */}
+      {numPizzas > 0 ? (
+        <>
       <h3 className="menu">
         Authentic Italian cuisine. 6 creative dishes to choose from. All from
         our stone oven, all organic, and all delicious.
       </h3>
-
-      <ul className="pizzas">
-        {pizzaData.map((pizza) => (
-          <PizzaItem key={pizza.name} pizzaObj={pizza} /> // here we are passing the entire pizza object as a prop to the PizzaItem component, and we are using the name of the pizza as the key for each item in the list. this is important because React uses the key to keep track of which items have changed, been added, or been removed from the list, and it helps React optimize the rendering of the list.
-        ))}
-      </ul>
-    </div>
+        <ul className="pizzas">
+          {pizzaData.map((pizza) => (
+            <PizzaItem key={pizza.name} pizzaObj={pizza} /> // here we are passing the entire pizza object as a prop to the PizzaItem component, and we are using the name of the pizza as the key for each item in the list. this is important because React uses the key to keep track of which items have changed, been added, or been removed from the list, and it helps React optimize the rendering of the list.
+          ))}
+        </ul>
+        </>
+      ) : (
+        <h3 className="menu">We're still working on our menu. Please come back later :)</h3>
+      )}
+    </>
   );
 }
 
