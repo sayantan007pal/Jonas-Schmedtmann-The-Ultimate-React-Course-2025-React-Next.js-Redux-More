@@ -46,7 +46,7 @@ function Headers() {
   // return <h1 style={headStyle}>Fast React Co.</h1>
   return (
     <header className="header">
-      <h1>Fast React Co.</h1>
+      <h1>Fast React Pizza Co.</h1>
     </header>
   );
 }
@@ -175,16 +175,16 @@ function Pizza(props) {
 // if the pizza is sold out, return null and don't render anything for that pizza
 function PizzaItem({ pizzaObj }) {
   // EARLY RETURN PATTERN: if soldOut is true, return null and skip rendering this pizza entirely
-  if (pizzaObj.soldOut === true) return null;
+  // if (pizzaObj.soldOut === true) return null;
 
   // If we reach here, the pizza is NOT sold out, so we render it
   return (
-    <li className="pizza">
+    <li className={`pizza ${pizzaObj.soldOut ? 'sold-out' : ''}`}> {/* here we are using template literals to conditionally apply the 'sold-out' class to the li element if the pizza is sold out. if pizzaObj.soldOut is true, it will add the 'sold-out' class to the li element, which we can then use in our CSS to style sold-out pizzas differently. if pizzaObj.soldOut is false, it will not add any additional class to the li element, and it will just have the 'pizza' class. */}
       <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
         <h3>{pizzaObj.name}</h3>
         <p>{pizzaObj.ingredients}</p>
-        <span>${pizzaObj.price}</span>
+        <span>{pizzaObj.soldOut ? 'SOLD OUT' : `$${pizzaObj.price}`}</span> {/* here we are using a ternary operator to conditionally render the price or the 'SOLD OUT' text based on whether the pizza is sold out or not. if pizzaObj.soldOut is true, it will render 'SOLD OUT', and if it's false, it will render the price of the pizza prefixed with a dollar sign. this allows us to display different information for sold-out pizzas without having to write separate code for each case. */}
       </div>
     </li>
   );
