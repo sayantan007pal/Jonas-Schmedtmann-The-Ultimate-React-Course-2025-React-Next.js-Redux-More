@@ -9,12 +9,14 @@ const messages = [
 ];
 function App() {
   const handlePrevious = () => {
-    alert('Previous');
+    if(step === 1) return;
+    setStep(step - 1);
   }
   const handleNext = () => {
+    if(step === 3) return;
     setStep(step + 1);
   };
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   return (
     <div className="App">
           <div className='numbers'>
