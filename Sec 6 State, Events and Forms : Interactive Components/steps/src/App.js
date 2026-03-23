@@ -8,6 +8,9 @@ const messages = [
   "Invest your new income 🤑",
 ];
 function App() {
+  function handlePrevious(){
+    alert('Previous');
+  }
   const step = 2;
   return (
     <div className="App">
@@ -20,10 +23,12 @@ function App() {
             <p>Step: {step} {messages[step - 1]}</p>
          </div>
          <div className='buttons'>
-            <button style={{backgroundColor: "#7950f2", color: "#fff"}} className='button active'>
+            <button style={{backgroundColor: "#7950f2", color: "#fff"}} onClick={handlePrevious} className='button active'> 
+              {/* here in onClick={handlePrevious} we are passing the function reference as callback, as if we use onClick={handlePrevious()} without the arrow function, it would execute immediately without waiting for the click event */}
               <span>Previous</span>
             </button>
-            <button style={{backgroundColor: "#7950f2", color: "#fff"}} className='button active'>
+            <button style={{backgroundColor: "#7950f2", color: "#fff"}} onClick={()=> alert('Next')} className='button active'>
+              {/* here in onClick={()=> alert('Next')} we are using an arrow function to define the callback inline, which allows us to execute the alert function when the button is clicked without needing to define a separate function like handleNext. */}
               <span>Next</span>
             </button>
          </div>
