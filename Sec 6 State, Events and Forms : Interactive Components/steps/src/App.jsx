@@ -1,7 +1,5 @@
-'use client';
-
 import { useState } from 'react';
-import './page.css';
+import './App.css';
 
 
 const messages = [
@@ -53,6 +51,4 @@ function App() {
   );
 }
 
-export default function Page() {
-  return <App />;
-}
+export default App;
