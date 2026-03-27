@@ -17,12 +17,15 @@ function App() {
     setStep(step + 1);
 
   //Bad Practice: We should never mutate the state directly, as it can lead to unexpected behavior and bugs in our application. Instead, we should always use the setState function provided by React to update the state, which ensures that the component re-renders correctly and maintains the integrity of the state.
-    test.name = 'John';
+    // test.name = 'John';
   };
   const [step, setStep] = useState(1);
-  const [test] = useState({name: 'Sayantan'});
+  // const [test] = useState({name: 'Sayantan'});
+  const [isOpen, setIsOpen] = useState(true);
   return (
-    <div className="App">
+    <div>
+      <button className='close' onClick={() => setIsOpen(!isOpen)}>X</button>
+    {isOpen && (<div className="App">
           <div className='numbers'>
             <div className= {step >= 1 ? 'active' : ''}>1</div>
             <div className= {step >= 2 ? 'active' : ''}>2</div>
@@ -30,7 +33,8 @@ function App() {
          </div>
          <div className='message'>
             <p>Step: {step} {messages[step - 1]}</p>
-            <p>Name: {test.name}</p>
+            {/* <p>Name: {test.name}</p> */}
+
          </div>
          {/* <div className='buttons'>
             <button style={{backgroundColor: "#7950f2", color: "#fff"}} onClick={handlePrevious} className='button active'> 
@@ -54,7 +58,8 @@ function App() {
               <span>Next</span>
             </button>
          </div>
-    </div>
+    </div>)}
+  </div>
   );
 }
 
