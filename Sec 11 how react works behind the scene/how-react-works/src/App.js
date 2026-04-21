@@ -18,6 +18,9 @@ const content = [
   },
 ];
 
+console.log(<DifferentContent test={23} />); // this is just a React element, not a component instance. It is an object that describes what we want to render.
+console.log(DifferentContent()); // this is just a function call, it returns a React element, which is an object that describes what we want to render.
+
 export default function App() {
   return (
     <div>
