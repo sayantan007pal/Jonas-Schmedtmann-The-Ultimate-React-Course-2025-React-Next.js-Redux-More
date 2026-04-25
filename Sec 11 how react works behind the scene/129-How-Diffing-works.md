@@ -113,6 +113,48 @@ Analogy: imagine checking two versions of a college seating chart.
 
 That is exactly the difference between stable keys and index-based matching.
 
+### Critical Pitfall: Position in the Render Tree ≠ Position in Your JSX Code
+
+React tracks identity using the **rendered output tree**, not where JSX tags appear in your source code. This is one of the most commonly misunderstood concepts in React.
+
+```jsx
+import { useState } from "react";
+
+function App() {
+  const [isFancy, setIsFancy] = useState(false);
+
+  // Branch A
+  if (isFancy) {
+    return (
+      <div>
+        <Counter isFancy={true} />
+      </div>
+    );
+  }
+
+  // Branch B
+  return (
+    <div>
+      <Counter isFancy={false} />
+    </div>
+  );
+}
+```
+
+Even though the two branches look like different JSX trees in your code, React sees the same output structure in both cases:
+
+```txt
+div
+  Counter (first child)
+```
+
+`Counter` is always the first child of `div`. From React's perspective, it is the same `Counter`. The counter state is **preserved** when `isFancy` flips, even though the JSX looks like it should remount.
+
+React does not inspect your `if/else` branching logic. It only compares what the component function actually returns.
+
+Interview line:
+> The render tree position is what React uses to match fibers, not where the JSX tag sits in your source code.
+
 ---
 
 ## 4. Rule 1: Different Types Produce Different Trees
@@ -555,6 +597,33 @@ Now the state follows the position, not the todo item. After sorting, "edit mode
 
 ## 10. Keys Can Also Intentionally Reset State
 
+Sometimes two components of the same type at the same position should be treated as completely separate instances. React gives you two options to achieve this.
+
+### Option 1: Render in Different Positions
+
+Render each variant in its own conditional slot so they occupy distinct positions in the render tree:
+
+```jsx
+import { useState } from "react";
+
+function Scoreboard() {
+  const [isPlayerA, setIsPlayerA] = useState(true);
+  return (
+    <div>
+      {isPlayerA && <Counter person="Taylor" />}
+      {!isPlayerA && <Counter person="Sarah" />}
+      <button onClick={() => setIsPlayerA((v) => !v)}>Next player</button>
+    </div>
+  );
+}
+```
+
+Taylor's `Counter` lives at slot 0 and Sarah's at slot 1. When you switch, the old `Counter` unmounts from its slot and a fresh one appears in the other slot. No key is needed here because the two components never share the same tree position.
+
+This approach is clean for two or three alternatives. It becomes verbose at scale.
+
+### Option 2: Use a Changed Key
+
 Keys are not only for arrays. They can also tell React that two components in the same position are conceptually different.
 
 ```jsx
@@ -652,6 +721,15 @@ Interview line:
 ---
 
 ## 12. Child Diffing in a Small Example
+
+React uses two different strategies depending on whether children have keys:
+
+| Children | Matching strategy |
+|----------|-------------------|
+| **No keys** | Compare sequentially by position — first new child → first old child, second → second, and so on. Inserting at the beginning causes every subsequent sibling to look "different". |
+| **With keys** | Build a lookup map of old children by key, then match each new child by key. Supports efficient reordering, insertion, and deletion. |
+
+The example below uses keys, so React uses the map-based approach:
 
 Old render:
 
@@ -758,6 +836,10 @@ Incomplete. The key and type must both match, and the match is scoped to the sam
 ### Trap 5: "Index keys are always wrong"
 
 Too strong. Index keys are acceptable only for static lists that never reorder, insert, delete, or filter. In dynamic lists, they are risky.
+
+### Trap 6: "React uses the JSX code position to track identity"
+
+Wrong. React tracks identity using the **rendered output tree**, not the structure of your JSX source code. A component at the same position in the render tree across two different `if` branches is treated as the same instance — its state is preserved even when the JSX code looks completely different on each branch. See the Critical Pitfall note in Section 3 for the example.
 
 ---
 
