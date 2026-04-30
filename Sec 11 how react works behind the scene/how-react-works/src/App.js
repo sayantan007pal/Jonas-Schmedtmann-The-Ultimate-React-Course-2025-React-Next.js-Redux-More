@@ -18,8 +18,8 @@ const content = [
   },
 ];
 
-console.log(<DifferentContent test={23} />); // this is just a React element, not a component instance. It is an object that describes what we want to render.
-console.log(DifferentContent()); // this is just a function call, it returns a React element, which is an object that describes what we want to render.
+// console.log(<DifferentContent test={23} />); // this is just a React element, not a component instance. It is an object that describes what we want to render.
+// console.log(DifferentContent()); // this is just a function call, it returns a React element, which is an object that describes what we want to render.
 
 export default function App() {
   return (
@@ -65,10 +65,29 @@ function TabContent({ item }) {
   const [showDetails, setShowDetails] = useState(true);
   const [likes, setLikes] = useState(0);
 
+  console.log('RENDER')
+
   function handleInc() {
     setLikes(likes + 1);
   }
 
+  function handleTripleInc() {
+    // setLikes(likes + 1);
+    // setLikes(likes + 1);
+    // console.log('This will still give 1 like increase as the state update is re-renderded in batch so when the whole bacth is taken for updation it will individually increase all previous likes by 1'+likes)
+    // setLikes(likes + 1);
+
+    //thus we are implementing callback for synchronous updation of likes
+    setLikes((like) => like + 1);
+    setLikes((like) => like + 1);
+    setLikes((like) => like + 1);
+  }
+
+  function handleUndo(){
+    setShowDetails(true)
+    setLikes(0)
+    console.log('The state only gets updated after re-rendering which proves the state batching is asynchronous, so we will be getting the total number of likes before undo call cleans them all, i.e ' + likes)
+  }
   return (
     <div className="tab-content">
       <h4>{item.summary}</h4>
@@ -82,12 +101,12 @@ function TabContent({ item }) {
         <div className="hearts-counter">
           <span>{likes} ❤️</span>
           <button onClick={handleInc}>+</button>
-          <button>+++</button>
+          <button onClick={handleTripleInc}>+++</button>
         </div>
       </div>
 
       <div className="tab-undo">
-        <button>Undo</button>
+        <button onClick={handleUndo}>Undo</button>
         <button>Undo in 2s</button>
       </div>
     </div>
